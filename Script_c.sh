@@ -12,7 +12,7 @@ RESET="\e[0m"
 if [[ "$1" == "--help" ]]; then
   echo -e "${YELLOW}🧠 Ús del script Script_c.sh${RESET}"
   echo
-  echo "  ./compila.sh [OPCIONS] fitxer"
+  echo "  ./Script_c.sh [OPCIONS] fitxer"
   echo
   echo "OPCIONS:"
   echo "  -pc            Compila per a PC (executa directament)"
