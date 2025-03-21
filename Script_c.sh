@@ -1,7 +1,6 @@
 #!/bin/bash 
 
-#durada de la compilació
-temps=$SECONDS
+SECONDS=0
 
 #colors
 RED="\e[31m"
@@ -121,7 +120,7 @@ rm -f log.txt
 #compilació
 if [[ "$compilar_per" == "avr" ]]; then 
   if $usa_makefile; then 
-    echo -e "${YELLOW}🛠️ Makefile detectat! Compilant amb make...${RESET}"
+    echo -e "${YELLOW}🛠️ Makefile detectat. Executant make...${RESET}"
     make > log.txt 2>&1 
   else 
     MCU="atmega328p"
@@ -136,9 +135,30 @@ if [[ "$compilar_per" == "avr" ]]; then
     fi 
 
     avr-objcopy -O ihex -R .eeprom "$NOM.elf" "$NOM.hex" >> log.txt 2>&1
-    echo -e "${GREEN}✅ Compilació correcta! Fitxer .hex generat: $NOM.hex${RESET}"
+    echo -e "${GREEN}✅ Compilació correcte. Fitxer .hex generat: $NOM.hex${RESET}"
     echo "📜 Sortida desada a log.txt"
+
     #generar informe
+    temps_total=$SECONDS
+    INFORME="informe_${NOM}.txt"
+    echo >> "$INFORME"
+    echo "Fitxer: $NOM.c" >> "$INFORME"
+    echo "Tipus: Compilació per $compilar_per" >> "$INFORME"
+    echo "Hora de la compilació: $(date '+%Y-%m-%d %H:%M:%S')" >> "$INFORME"
+    echo "Temps de compilació: $(temps_total)s" >> "$INFORME"
+    echo >> "$INFORME"
+    echo "✅ Compilació correcte" >> "$INFORME"
+    echo "Fitxers generats:" >> "$INFORME"
+    [[ -f "$NOM.elf" ]] && echo " - $NOM.elf" >> "$INFORME"
+    [[ -f "$NOM.hex" ]] && echo " - $NOM.hex" >> "$INFORME"
+    [[ -f "log.txt" ]] && echo " - log.txt" >> "$INFORME"
+    echo >> "$INFORME"
+    echo "Usuari: $(whoami)@$(hostname)" >> "$INFORME"
+    echo >> "$INFORME"
+    echo "Versió de avr-gcc:" >> "$INFORME"
+    avr-gcc --version | head -n 1 >> "$INFORME"
+    echo >> "$INFORME"
+    echo -e "${GREEN} Informe generat: $INFORME${RESET}"
   fi 
 
   if $upload; then 
@@ -148,7 +168,7 @@ if [[ "$compilar_per" == "avr" ]]; then
 
 elif [[ "$compilar_per" == "pc" ]]; then
   if $usa_makefile; then 
-    echo -e "${YELLOW}🛠️ Makefile detectat! Compilant amb make...${RESET}"
+    echo -e "${YELLOW}🛠️ Makefile detectat. Executant make...${RESET}"
     make > log.txt 2>&1 
   else 
     echo -e "${YELLOW}🔧 Compilant per PC...${RESET}"
@@ -159,9 +179,30 @@ elif [[ "$compilar_per" == "pc" ]]; then
     fi 
     echo -e "${GREEN}✅ Executant...${RESET}"
     echo "📜 Sortida desada a log.txt"
-    #generar informe
     echo -e "${YELLOW}Executant $NOM...${RESET}"
     ./"$NOM"
+    #generar informe
+    temps_total=$SECONDS
+    INFORME="informe_${NOM}.txt"
+    echo >> "$INFORME"
+    echo "Fitxer: $NOM.c" >> "$INFORME"
+    echo "Tipus: Compilació per $compilar_per" >> "$INFORME"
+    echo "Hora de la compilació: $(date '+%Y-%m-%d %H:%M:%S')" >> "$INFORME"
+    echo "Temps de compilació: $(temps_total)s" >> "$INFORME"
+    echo >> "$INFORME"
+    echo "✅ Compilació correcte" >> "$INFORME"
+    echo "Fitxers generats:" >> "$INFORME"
+    [[ -f "$NOM.elf" ]] && echo " - $NOM.elf" >> "$INFORME"
+    [[ -f "$NOM.hex" ]] && echo " - $NOM.hex" >> "$INFORME"
+    [[ -f "log.txt" ]] && echo " - log.txt" >> "$INFORME"
+    echo >> "$INFORME"
+    echo "Usuari: $(whoami)@$(hostname)" >> "$INFORME"
+    echo >> "$INFORME"
+    echo "Versió de gcc:" >> "$INFORME"
+    gcc --version | head -n 1 >> "$INFORME"
+    echo >> "$INFORME"
+    echo -e "${GREEN} Informe generat: $INFORME${RESET}"
+
   fi 
 else
   echo -e "${RED}❌ No s'ha especificat si és compilació per PC o AVR.${RESET}"
@@ -174,7 +215,7 @@ if $clean; then
     echo -e "${YELLOW}🧽 Fent make clean...${RESET}"
     make clean
   else 
-    echo -e "${YELLOW}🧽 Esborrant fitxers generats manualment...${RESET}"
+    echo -e "${YELLOW}🧽 Esborrant fitxers brossa...${RESET}"
     rm -f *.elf *.hex *.o *.out log.txt
   fi 
 fi
