@@ -88,27 +88,27 @@ fi
 if $MODE_RAPID; then 
   read -p "Carregar el codi a l'arduino? (Y/n): " res_upload 
   res_upload=$(echo "$res_upload" | tr '[:upper:]' '[:lower:]')
-  [[ -z "$NOM" ] || [ "$res_upload" == "n" ]] && UPLOAD=false 
+  [[ -z "$res_upload" || "$res_upload" == "y" ]] && UPLOAD=false 
 
   read -p "Vols obrir picocom? (N/y): " res_pico
   res_pico=$(echo "$res_pico" | tr '[:upper:]' '[:lower:]')
-  [[ -z "$NOM" ] || [ "$res_pico" == "y" ]] && PICOCOM=true
+  [[ -z "$res_pico" || "$res_pico" == "y" ]] && PICOCOM=true
 
   read -p "Port? (Per defecte: /dev/ttyACM0):" port_in
-  port_in=$(echo "$port_in" | tr '[:upper:]' '[:lower:]')
   [[ -n "$port_in" ]] && PORT=$port_in
-
-  read -p "Baud rate? (Per defecte: 9600):" baud_in
-  baud_in=$(echo "$baud_in" | tr '[:upper:]' '[:lower:]')
-  [[ -n "$baud_in" ]] && BAUD=$baud_in
+  
+  if $PICOCOM; then 
+    read -p "Baud rate? (Per defecte: 9600):" baud_in
+    [[ -n "$baud_in" ]] && BAUD=$baud_in
+  fi 
 
   read -p "Clean? (N/y): " res_clean
   res_clean=$(echo "$res_clean" | tr '[:upper:]' '[:lower:]')
-  [ -z "$NOM" ] || [[ -n $res_clean == "n" ]] && CLEAN=true 
+  [[ -z "$res_clean" || "$res_clean" == "n" ]] && CLEAN=true 
 fi 
 
 #compilació
-echo -e "${YELLOW}🔧 Compilant $FILENAME.s...${RESET}"
+echo -e "${YELLOW}🔧 Compilant $NOM.s...${RESET}"
 avr-gcc -mmcu=atmega328p -o "$NOM.elf" "$NOM.s" >log.txt 2>&1 
 if [[ $? -ne 0 ]]; then
   echo -e "${RED}❌ Error en la compilació${RESET}"
@@ -118,7 +118,7 @@ fi
 #.hex
 avr-objcopy -O ihex "$NOM.elf" "$NOM.hex" >> log.txt 2>&1 
 
-echo -e "${GREEN}✅ Compilació correcta: $FILENAME.hex generat${RESET}"
+echo -e "${GREEN}✅ Compilació correcta: $NOM.hex generat${RESET}"
 echo "📜 Sortida desada a log.txt"
 
 #pujar a l'Arduino
