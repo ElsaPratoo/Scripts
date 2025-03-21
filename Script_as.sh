@@ -92,7 +92,7 @@ if $MODE_RAPID; then
 
   read -p "Vols obrir picocom? (N/y): " res_pico
   res_pico=$(echo "$res_pico" | tr '[:upper:]' '[:lower:]')
-  if [[ -z "$res_pico" || "$res_pico" == "y" ]]; then
+  if [[ "$res_pico" == "y" ]]; then
     PICOCOM=true
   fi 
 

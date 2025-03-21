@@ -72,6 +72,14 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
+if [[ -z "$NOM" ]]; then
+  echo -e "${YELLOW}📂 Fitxers disponibles (.c):${RESET}"
+  lsd *.s 2>/dev/null || echo -e "${RED}❌ No s'ha trobat cap .c al directori actual.${RESET}"
+  echo 
+  read -p "Nom del fitxer?" NOM
+fi 
+
+
 if ! $mode_rapid; then
   read -p "Nom del fitxer?" NOM
   if [[ ! -f "$NOM.c" ]]; then
