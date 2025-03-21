@@ -24,8 +24,8 @@ if [[ "$1" == "--help" ]]; then
   echo "  --help         Mostra aquest missatge d'ajuda"
   echo
   echo "EXEMPLES:"
-  echo "  ./compila.sh -pc hola"
-  echo "  ./compila.sh -avr semafor -upload -port /dev/ttyUSB0 -clean"
+  echo "  ./Script_c.sh -pc hola"
+  echo "  ./Script_c.sh -avr semafor -upload -port /dev/ttyUSB0 -clean"
   exit 0
 fi
 
