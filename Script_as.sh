@@ -24,7 +24,7 @@ if [[ "$1" == "--help" ]]; then
 fi
 
 #variables per defecte
-UPLOAD=true
+UPLOAD=false
 PICOCOM=false
 BAUD=9600
 CLEAN=false
@@ -88,11 +88,13 @@ fi
 if $MODE_RAPID; then 
   read -p "Carregar el codi a l'arduino? (Y/n): " res_upload 
   res_upload=$(echo "$res_upload" | tr '[:upper:]' '[:lower:]')
-  [[ -z "$res_upload" || "$res_upload" == "y" ]] && UPLOAD=false 
+  [[ -z "$res_upload" || "$res_upload" == "y" ]] && UPLOAD=true 
 
   read -p "Vols obrir picocom? (N/y): " res_pico
   res_pico=$(echo "$res_pico" | tr '[:upper:]' '[:lower:]')
-  [[ -z "$res_pico" || "$res_pico" == "y" ]] && PICOCOM=true
+  if [[ -z "$res_pico" || "$res_pico" == "y" ]]; then
+    PICOCOM=true
+  fi 
 
   read -p "Port? (Per defecte: /dev/ttyACM0):" port_in
   [[ -n "$port_in" ]] && PORT=$port_in
@@ -104,7 +106,9 @@ if $MODE_RAPID; then
 
   read -p "Clean? (N/y): " res_clean
   res_clean=$(echo "$res_clean" | tr '[:upper:]' '[:lower:]')
-  [[ -z "$res_clean" || "$res_clean" == "n" ]] && CLEAN=true 
+  if [[ -z "$res_clean" || "$res_clean" == "n" ]]; then 
+    CLEAN=true
+  fi
 fi 
 
 #compilació
