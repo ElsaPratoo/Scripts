@@ -12,8 +12,6 @@ RESET="\e[0m"
 if [[ "$1" == "--help" ]]; then
   echo -e "${YELLOW}🧠 Ús del script Script_c.sh${RESET}"
   echo
-  echo "  ./Script_c.sh [OPCIONS] fitxer"
-  echo
   echo "OPCIONS:"
   echo "  -pc            Compila per a PC (executa directament)"
   echo "  -avr           Compila per Arduino (AVR)"
@@ -63,6 +61,10 @@ while [[ $# -gt 0 ]]; do
     -port)
       shift
       port=$1;;
+    -*)
+      echo -e "${RED}❌ Opció desconeguda: $1${RESET}"
+      exit 1 
+      ;;
     *)
       shift
       ;;
@@ -142,20 +144,20 @@ if [[ "$compilar_per" == "avr" ]]; then
     temps_total=$SECONDS
     INFORME="informe_${NOM}.txt"
     echo >> "$INFORME"
-    echo "Fitxer: $NOM.c" >> "$INFORME"
-    echo "Tipus: Compilació per $compilar_per" >> "$INFORME"
-    echo "Hora de la compilació: $(date '+%Y-%m-%d %H:%M:%S')" >> "$INFORME"
+    echo "📄 Fitxer: $NOM.c" >> "$INFORME"
+    echo "📦 Tipus: Compilació per $compilar_per" >> "$INFORME"
+    echo "📅 Hora de la compilació: $(date '+%Y-%m-%d %H:%M:%S')" >> "$INFORME"
     echo "Temps de compilació: $(temps_total)s" >> "$INFORME"
     echo >> "$INFORME"
     echo "✅ Compilació correcte" >> "$INFORME"
-    echo "Fitxers generats:" >> "$INFORME"
+    echo "📂 Fitxers generats:" >> "$INFORME"
     [[ -f "$NOM.elf" ]] && echo " - $NOM.elf" >> "$INFORME"
     [[ -f "$NOM.hex" ]] && echo " - $NOM.hex" >> "$INFORME"
     [[ -f "log.txt" ]] && echo " - log.txt" >> "$INFORME"
     echo >> "$INFORME"
-    echo "Usuari: $(whoami)@$(hostname)" >> "$INFORME"
+    echo "🧑‍💻 Usuari: $(whoami)@$(hostname)" >> "$INFORME"
     echo >> "$INFORME"
-    echo "Versió de avr-gcc:" >> "$INFORME"
+    echo "🛠️ Versió de avr-gcc:" >> "$INFORME"
     avr-gcc --version | head -n 1 >> "$INFORME"
     echo >> "$INFORME"
     echo -e "${GREEN} Informe generat: $INFORME${RESET}"
@@ -185,20 +187,20 @@ elif [[ "$compilar_per" == "pc" ]]; then
     temps_total=$SECONDS
     INFORME="informe_${NOM}.txt"
     echo >> "$INFORME"
-    echo "Fitxer: $NOM.c" >> "$INFORME"
-    echo "Tipus: Compilació per $compilar_per" >> "$INFORME"
-    echo "Hora de la compilació: $(date '+%Y-%m-%d %H:%M:%S')" >> "$INFORME"
+    echo "📄 Fitxer: $NOM.c" >> "$INFORME"
+    echo "📦 Tipus: Compilació per $compilar_per" >> "$INFORME"
+    echo "📅 Hora de la compilació: $(date '+%Y-%m-%d %H:%M:%S')" >> "$INFORME"
     echo "Temps de compilació: $(temps_total)s" >> "$INFORME"
     echo >> "$INFORME"
     echo "✅ Compilació correcte" >> "$INFORME"
-    echo "Fitxers generats:" >> "$INFORME"
+    echo "📂 Fitxers generats:" >> "$INFORME"
     [[ -f "$NOM.elf" ]] && echo " - $NOM.elf" >> "$INFORME"
     [[ -f "$NOM.hex" ]] && echo " - $NOM.hex" >> "$INFORME"
     [[ -f "log.txt" ]] && echo " - log.txt" >> "$INFORME"
     echo >> "$INFORME"
-    echo "Usuari: $(whoami)@$(hostname)" >> "$INFORME"
+    echo "🧑‍💻 Usuari: $(whoami)@$(hostname)" >> "$INFORME"
     echo >> "$INFORME"
-    echo "Versió de gcc:" >> "$INFORME"
+    echo "🛠️ Versió de gcc:" >> "$INFORME"
     gcc --version | head -n 1 >> "$INFORME"
     echo >> "$INFORME"
     echo -e "${GREEN} Informe generat: $INFORME${RESET}"
