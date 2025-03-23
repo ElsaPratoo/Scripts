@@ -1,7 +1,5 @@
 #!/bin/bash 
 
-SECONDS=0
-
 #colors
 RED="\e[31m"
 GREEN="\e[32m"
@@ -147,28 +145,6 @@ if [[ "$compilar_per" == "avr" ]]; then
     avr-objcopy -O ihex -R .eeprom "$NOM.elf" "$NOM.hex" >> log.txt 2>&1
     echo -e "${GREEN}✅ Compilació correcte. Fitxer .hex generat: $NOM.hex${RESET}"
     echo "📜 Sortida desada a log.txt"
-
-    #generar informe
-    temps_total=$SECONDS
-    INFORME="informe_${NOM}.txt"
-    echo >> "$INFORME"
-    echo "📄 Fitxer: $NOM.c" >> "$INFORME"
-    echo "📦 Tipus: Compilació per $compilar_per" >> "$INFORME"
-    echo "📅 Hora de la compilació: $(date '+%Y-%m-%d %H:%M:%S')" >> "$INFORME"
-    echo "Temps de compilació: $(temps_total)s" >> "$INFORME"
-    echo >> "$INFORME"
-    echo "✅ Compilació correcte" >> "$INFORME"
-    echo "📂 Fitxers generats:" >> "$INFORME"
-    [[ -f "$NOM.elf" ]] && echo " - $NOM.elf" >> "$INFORME"
-    [[ -f "$NOM.hex" ]] && echo " - $NOM.hex" >> "$INFORME"
-    [[ -f "log.txt" ]] && echo " - log.txt" >> "$INFORME"
-    echo >> "$INFORME"
-    echo "🧑‍💻 Usuari: $(whoami)@$(hostname)" >> "$INFORME"
-    echo >> "$INFORME"
-    echo "🛠️ Versió de avr-gcc:" >> "$INFORME"
-    avr-gcc --version | head -n 1 >> "$INFORME"
-    echo >> "$INFORME"
-    echo -e "${GREEN} Informe generat: $INFORME${RESET}"
   fi 
 
   if $upload; then 
@@ -191,28 +167,6 @@ elif [[ "$compilar_per" == "pc" ]]; then
     echo "📜 Sortida desada a log.txt"
     echo -e "${YELLOW}Executant $NOM...${RESET}"
     ./"$NOM"
-    #generar informe
-    temps_total=$SECONDS
-    INFORME="informe_${NOM}.txt"
-    echo >> "$INFORME"
-    echo "📄 Fitxer: $NOM.c" >> "$INFORME"
-    echo "📦 Tipus: Compilació per $compilar_per" >> "$INFORME"
-    echo "📅 Hora de la compilació: $(date '+%Y-%m-%d %H:%M:%S')" >> "$INFORME"
-    echo "Temps de compilació: $(temps_total)s" >> "$INFORME"
-    echo >> "$INFORME"
-    echo "✅ Compilació correcte" >> "$INFORME"
-    echo "📂 Fitxers generats:" >> "$INFORME"
-    [[ -f "$NOM.elf" ]] && echo " - $NOM.elf" >> "$INFORME"
-    [[ -f "$NOM.hex" ]] && echo " - $NOM.hex" >> "$INFORME"
-    [[ -f "log.txt" ]] && echo " - log.txt" >> "$INFORME"
-    echo >> "$INFORME"
-    echo "🧑‍💻 Usuari: $(whoami)@$(hostname)" >> "$INFORME"
-    echo >> "$INFORME"
-    echo "🛠️ Versió de gcc:" >> "$INFORME"
-    gcc --version | head -n 1 >> "$INFORME"
-    echo >> "$INFORME"
-    echo -e "${GREEN} Informe generat: $INFORME${RESET}"
-
   fi 
 else
   echo -e "${RED}❌ No s'ha especificat si és compilació per PC o AVR.${RESET}"
