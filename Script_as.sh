@@ -8,7 +8,7 @@ RESET="\e[0m"
 
 #help
 if [[ "$1" == "--help" ]]; then
-  echo -e "${YELLOW}🧠 Ús del script Script_a.sh${RESET}"
+  echo -e "${YELLOW} Ús del script Script_a.sh${RESET}"
   echo 
   echo "OPCIONS:"
   echo "  -no-upload           No carregar el .hex a l'Arduino (per defecte: si)"
@@ -58,7 +58,7 @@ while [[ $# -gt 0 ]]; do
       MODE_RAPID=false
       ;;
     -*)
-      echo -e "${RED}❌ Opció desconeguda: $1${RESET}"
+      echo -e "${RED} Opció desconeguda: $1${RESET}"
       exit 1 
       ;;
     *)
@@ -72,15 +72,15 @@ done
 rm -f log.txt
 
 if [[ -z "$NOM" ]]; then
-  echo -e "${YELLOW}📂 Fitxers disponibles (.s):${RESET}"
-  lsd *.s 2>/dev/null || echo -e "${RED}❌ No s'ha trobat cap .s al directori actual.${RESET}"
+  echo -e "${YELLOW} Fitxers disponibles (.s):${RESET}"
+  lsd *.s 2>/dev/null || echo -e "${RED} No s'ha trobat cap .s al directori actual.${RESET}"
   echo 
   read -p "Nom del fitxer?" NOM
 fi 
 
 #comprovació
 if [[ ! -f "$NOM.s" ]]; then 
-  echo -e "${RED}❌ No s'ha trobat cap fitxer .s al directori actual.${RESET}"
+  echo -e "${RED} No s'ha trobat cap fitxer .s al directori actual.${RESET}"
   exit 1 
 fi 
 
@@ -112,33 +112,33 @@ if $MODE_RAPID; then
 fi 
 
 #compilació
-echo -e "${YELLOW}🔧 Compilant $NOM.s...${RESET}"
+echo -e "${YELLOW} Compilant $NOM.s...${RESET}"
 avr-gcc -mmcu=atmega328p -o "$NOM.elf" "$NOM.s" >log.txt 2>&1 
 if [[ $? -ne 0 ]]; then
-  echo -e "${RED}❌ Error en la compilació${RESET}"
+  echo -e "${RED} Error en la compilació${RESET}"
   exit 1 
 fi 
 
 #.hex
 avr-objcopy -O ihex "$NOM.elf" "$NOM.hex" >> log.txt 2>&1 
 
-echo -e "${GREEN}✅ Compilació correcta: $NOM.hex generat${RESET}"
-echo "📜 Sortida desada a log.txt"
+echo -e "${GREEN} Compilació correcta: $NOM.hex generat${RESET}"
+echo " Sortida desada a log.txt"
 
 #pujar a l'Arduino
 if $UPLOAD; then 
-  echo -e "${YELLOW}🔌 Carregant a $PORT...${RESET}"
+  echo -e "${YELLOW}Carregant a $PORT...${RESET}"
   avrdude -c arduino -P "$PORT" -p m328p -U flash:w:"$NOM.hex":i 
 fi 
 
 #picocom
 if $PICOCOM; then
-  echo -e "${YELLOW}🖧 Obrint picocom a $PORT amb baud $BAUD...${RESET}"
+  echo -e "${YELLOW}Obrint picocom a $PORT amb baud $BAUD...${RESET}"
   picocom -b "$BAUD" "$PORT"
 fi 
 
 #clean
 if $CLEAN; then
-  echo -e "${YELLOW}🧽 Netejant fitxers temporals...${RESET}"
+  echo -e "${YELLOW}Netejant fitxers temporals...${RESET}"
   rm -f "$NOM.elf" "$NOM.hex" log.txt 
 fi 

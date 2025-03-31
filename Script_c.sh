@@ -8,7 +8,7 @@ RESET="\e[0m"
 
 #help
 if [[ "$1" == "--help" ]]; then
-  echo -e "${YELLOW}🧠 Ús del script Script_c.sh${RESET}"
+  echo -e "${YELLOW}Ús del script Script_c.sh${RESET}"
   echo
   echo "OPCIONS:"
   echo "  -pc            Compila per a PC (executa directament)"
@@ -60,7 +60,7 @@ while [[ $# -gt 0 ]]; do
       shift
       port=$1;;
     -*)
-      echo -e "${RED}❌ Opció desconeguda: $1${RESET}"
+      echo -e "${RED}Opció desconeguda: $1${RESET}"
       exit 1 
       ;;
     *)
@@ -71,8 +71,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$NOM" ]]; then
-  echo -e "${YELLOW}📂 Fitxers disponibles (.c):${RESET}"
-  lsd *.s 2>/dev/null || echo -e "${RED}❌ No s'ha trobat cap .c al directori actual.${RESET}"
+  echo -e "${YELLOW}Fitxers disponibles (.c):${RESET}"
+  lsd *.s 2>/dev/null || echo -e "${RED}No s'ha trobat cap .c al directori actual.${RESET}"
   echo 
   read -p "Nom del fitxer?" NOM
 fi 
@@ -81,7 +81,7 @@ fi
 if ! $mode_rapid; then
   read -p "Nom del fitxer?" NOM
   if [[ ! -f "$NOM.c" ]]; then
-    echo -e "${RED}❌ El fitxer $NOM.c no existeix.${RESET}"
+    echo -e "${RED}El fitxer $NOM.c no existeix.${RESET}"
     exit 1 
   fi 
   #compilació
@@ -113,7 +113,7 @@ fi
 
 #comprovació de si existeix el fitxer
 if [[ ! -f "$NOM.c" ]]; then 
-  echo -e "${RED}❌ El fitxer $NOM.c no existeix.${RESET}"
+  echo -e "${RED}El fitxer $NOM.c no existeix.${RESET}"
   exit 1 
 fi 
 
@@ -128,58 +128,58 @@ rm -f log.txt
 #compilació
 if [[ "$compilar_per" == "avr" ]]; then 
   if $usa_makefile; then 
-    echo -e "${YELLOW}🛠️ Makefile detectat. Executant make...${RESET}"
+    echo -e "${YELLOW}Makefile detectat. Executant make...${RESET}"
     make > log.txt 2>&1 
   else 
     MCU="atmega328p"
     F_CPU="16000000UL"
-    echo -e "${YELLOW}🔧 Compilant per AVR ($MCU)...${RESET}"
+    echo -e "${YELLOW}Compilant per AVR ($MCU)...${RESET}"
 
     avr-gcc -mmcu=$MCU -DF_CPU=$F_CPU -Wall -Os -o "$NOM.elf" "$NOM.c" > log.txt 2>&1
   
     if [[ $? -ne 0 ]]; then
-      echo -e "${RED}❌ Error de compilació AVR.${RESET}"
+      echo -e "${RED}Error de compilació AVR.${RESET}"
       exit 1 
     fi 
 
     avr-objcopy -O ihex -R .eeprom "$NOM.elf" "$NOM.hex" >> log.txt 2>&1
-    echo -e "${GREEN}✅ Compilació correcte. Fitxer .hex generat: $NOM.hex${RESET}"
-    echo "📜 Sortida desada a log.txt"
+    echo -e "${GREEN}Compilació correcte. Fitxer .hex generat: $NOM.hex${RESET}"
+    echo "Sortida desada a log.txt"
   fi 
 
   if $upload; then 
-    echo -e "${YELLOW}🔌 Carregant a $port...${RESET}"
+    echo -e "${YELLOW}Carregant a $port...${RESET}"
     avrdude -v -patmega328p -carduino -P"$port" -b115200 -D -Uflash:w:"$NOM.hex":i
   fi 
 
 elif [[ "$compilar_per" == "pc" ]]; then
   if $usa_makefile; then 
-    echo -e "${YELLOW}🛠️ Makefile detectat. Executant make...${RESET}"
+    echo -e "${YELLOW}Makefile detectat. Executant make...${RESET}"
     make > log.txt 2>&1 
   else 
-    echo -e "${YELLOW}🔧 Compilant per PC...${RESET}"
+    echo -e "${YELLOW}Compilant per PC...${RESET}"
     gcc -Wall -o "$NOM" "$NOM.c" > log.txt 2>&1
     if [[ $? -ne 0 ]]; then 
-      echo -e "${RED}❌ Error de compilació. Consulta el log.txt${RESET}"
+      echo -e "${RED}Error de compilació. Consulta el log.txt${RESET}"
       exit 1 
     fi 
-    echo -e "${GREEN}✅ Executant...${RESET}"
-    echo "📜 Sortida desada a log.txt"
+    echo -e "${GREEN}Executant...${RESET}"
+    echo "Sortida desada a log.txt"
     echo -e "${YELLOW}Executant $NOM...${RESET}"
     ./"$NOM"
   fi 
 else
-  echo -e "${RED}❌ No s'ha especificat si és compilació per PC o AVR.${RESET}"
+  echo -e "${RED}No s'ha especificat si és compilació per PC o AVR.${RESET}"
   exit 1 
 fi 
 
 #neteja
 if $clean; then 
   if $usa_makefile; then 
-    echo -e "${YELLOW}🧽 Fent make clean...${RESET}"
+    echo -e "${YELLOW}Fent make clean...${RESET}"
     make clean
   else 
-    echo -e "${YELLOW}🧽 Esborrant fitxers brossa...${RESET}"
+    echo -e "${YELLOW}Esborrant fitxers brossa...${RESET}"
     rm -f *.elf *.hex *.o *.out log.txt
   fi 
 fi
