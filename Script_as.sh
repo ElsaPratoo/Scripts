@@ -8,7 +8,7 @@ RESET="\e[0m"
 
 #help
 if [[ "$1" == "--help" ]]; then
-  echo -e "${YELLOW} Ús del script Script_a.sh${RESET}"
+  echo -e "${YELLOW}Ús del script Script_a.sh${RESET}"
   echo 
   echo "OPCIONS:"
   echo "  -no-upload           No carregar el .hex a l'Arduino (per defecte: si)"
