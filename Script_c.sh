@@ -17,6 +17,7 @@ if [[ "$1" == "--help" ]]; then
   echo "  -port [PORT]   Defineix el port (per defecte: /dev/ttyACM0)"
   echo "  -clean         Neteja fitxers temporals després de compilar"
   echo "  --help         Mostra aquest missatge d'ajuda"
+  echo "  -l             Serveix per afegir llibreries necessaries a l'hora d'executar"
   echo
   echo "EXEMPLES:"
   echo "  ./Script_c.sh -pc hola"
